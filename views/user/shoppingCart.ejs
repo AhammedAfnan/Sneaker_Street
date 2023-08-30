@@ -1,0 +1,225 @@
+
+<%- include('../partials/head.ejs') %>
+<%- include('../partials/userHeader.ejs') %>
+<%- include('../partials/userBreadcrub.ejs') %>
+
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="shopping__cart__table">
+                        <% 
+                        let totalPrice = 0
+                        let totalDiscount = 0
+                        let currPrice;
+                        if(cartItems.length){
+                        %>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% 
+
+                                //let discountPercentage
+
+                                    for(let i=0; i<cartItems.length; i++){
+                                        %>
+                                        <tr>
+                                            <td class="product__cart__item">
+                                                <div class="product__cart__item__pic">
+                                                    <img width="100px" src="/images/productImages/<%= cartItems[i].productId.images[0] %>" alt="Product image">
+                                                </div>
+                                                <div class="product__cart__item__text">
+                                                    <h6><%= cartItems[i].productId.name %></h6>
+                                                    <h6><%= cartItems[i].productId.brand %></h6>
+                                                    <% 
+                                                    if(cartItems[i].productId.offerPrice){
+                                                        console.log('product has offer')
+                                                        currPrice = cartItems[i].productId.offerPrice
+                                                    }else{
+                                                        currPrice = cartItems[i].productId.price - cartItems[i].productId.discountPrice
+                                                    }
+                                                    //discountPercentage = Math.floor(100 - ( (currPrice*100)/cartItems[i].productId.price ));
+                                                    %>
+                                                    <h5>&#8377;<%= currPrice %></h5>
+                                                </div>
+                                                <span style="color: red;" id="<%= cartItems[i]._id %>msg"></span>
+    
+                                            </td>
+                                            <td class="quantity__item">
+                                                <div class="row d-flex justify-content-center align-items-center">
+    
+                                                    <button id="<%= cartItems[i]._id %>minus"
+                                                            onclick="updateCart(-1,'<%= cartItems[i].productId._id%>','<%= cartItems[i]._id %>')">
+                                                            -
+                                                    </button>
+    
+                                                    <span class="mx-2 quantity"  id="<%= cartItems[i]._id %>" data-max-quantity="<%= cartItems[i].productId.quantity %>">
+                                                        <%= cartItems[i].quantity %>
+                                                    </span>
+    
+                                                    <button id="<%= cartItems[i]._id %>plus"
+                                                        onclick="updateCart(1,'<%= cartItems[i].productId._id%>','<%= cartItems[i]._id %>')">
+                                                        +
+                                                    </button>
+    
+                                                </div>
+
+                                            </td>
+                                            <% 
+                                            //let price = cartItems[i].productId.price - cartItems[i].productId.discountPrice
+                                            %>
+                                            <td id="total<%= cartItems[i]._id %>" class="cart__price">&#8377;<%= currPrice*cartItems[i].quantity  %></td>
+                                            <% 
+                                            totalPrice += cartItems[i].productId.price*cartItems[i].quantity
+                                            if(cartItems[i].productId.offerPrice){
+                                                totalDiscount += (cartItems[i].productId.price - cartItems[i].productId.offerPrice)*cartItems[i].quantity
+                                            }else{
+                                                totalDiscount += cartItems[i].productId.discountPrice*cartItems[i].quantity
+                                            }
+                                            %>
+                                            <td class="cart__close">
+                                                <form action="/shoppingCart/removeItem/<%= cartItems[i].productId._id %>" method="post">
+                                                    <button class="border-0 bg-transparent" type="submit">
+                                                        <i class="fa fa-close"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <% 
+                                    }
+                                }else{
+                                    %>
+                                    <tr>
+                                        <td>
+                                            <!-- <h5> <strong> Add items to the cart</strong> </h5> -->
+                                            <img src="/pngwing.com.png" alt="Cart Empty Image">
+                                        </td>
+                                    </tr>
+                                    <%  
+                                }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn mb-3">
+                                <a href="/shop">Continue Shopping</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="cart__total">
+                        <h6>Cart total</h6>
+                        <ul>
+                            <!-- <li>Subtotal <span>$ 169.50</span></li> -->
+                            <li>Total MRP <span  id="totalPrice"> &#8377; <%= totalPrice %></span></li>
+                            <li>Discount <span style="color: green;"  id="totalDiscount"> -&#8377; <%= totalDiscount %></span></li>
+                            <li>Amount <span  id="amount"> &#8377; <%= totalPrice - totalDiscount %></span></li>
+                        </ul>
+                        <% 
+                        if(cartItems.length){
+                            %>
+                            <a href="/shoppingCart/proceedToCheckout" class="primary-btn"  >Proceed to checkout</a>
+                            <%  
+                        }
+                        %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shopping Cart Section End -->
+
+
+
+<%- include('../partials/footer.ejs') %>  
+
+<script>
+    function updateCart(operation, prodId, spanID) {
+        let quantity = document.getElementById(spanID)
+        let parsedQuantity = parseInt(quantity.innerText)
+
+        let minQuantity = 1;
+        let maxQuantity = parseInt(quantity.dataset.maxQuantity);
+
+        maxQuantity = Math.min(maxQuantity, 10);
+
+        if (operation == 1 && parsedQuantity < maxQuantity) {
+            parsedQuantity++
+        } else if (operation == -1 && parsedQuantity > 1) {
+            parsedQuantity--
+        }
+        quantity.innerText = parsedQuantity
+
+        ajaxConnection(parsedQuantity, prodId, spanID)
+
+        //btn dis
+        var plusBtn = document.getElementById(`${spanID}plus`)
+        var minusBtn = document.getElementById(`${spanID}minus`)
+        plusBtn.disabled = true
+        minusBtn.disabled = true
+
+        if (!parsedQuantity === 1) {
+            plusBtn.disabled = true;
+        } else {
+            plusBtn.disabled = false;
+        }
+
+        if (!parsedQuantity == 10 || !parsedQuantity == maxQuantity) {
+            minusBtn.disabled = true;
+        } else {
+            minusBtn.disabled = false;
+        }
+        //making error msg
+
+        let messageElement = document.getElementById(`${spanID}msg`);
+
+
+        if (parsedQuantity == 10) {
+            messageElement.innerText = "Max quantity reached";
+        } else if (parsedQuantity == maxQuantity) {
+            messageElement.innerText = "Stock limit reached"; 
+        } else {
+            messageElement.innerText = ""
+        }
+    }
+
+
+    //ajax
+    function ajaxConnection(amt, prodId, spanID) {
+        $.ajax({
+            method: 'put',
+            url: '/updateCart',
+            data: { amt, prodId },
+            success: (res) => {
+                if (res.status == true) {
+
+                    $(`#total${spanID}`).html(`₹${res.data.totalSingle}`)
+                    $(`#totalPrice`).html(`₹${res.data.totalPrice}`)
+                    $(`#totalDiscount`).html(`-₹${res.data.totalDiscount}`)
+                    $(`#amount`).html(`₹${res.data.totalPrice - res.data.totalDiscount}`)
+
+                    document.getElementById(`${spanID}plus`).disabled = false
+                    document.getElementById(`${spanID}minus`).disabled = false
+
+                } else if (res.status == false) {
+                    $(`#${spanID}msg`).html(res.data)
+                }
+            }
+        })
+    }
+</script>
+
+<%- include('../partials/script.ejs') %>

@@ -1,0 +1,272 @@
+<%- include('../partials/head.ejs') %>
+<%- include('../partials/userHeader.ejs') %>
+<%- include('../partials/userBreadcrub.ejs') %>
+
+<style>
+    .product__pagination a.active {
+    background-color: yellow;
+    }
+</style>
+
+    <!-- Shop Section Begin -->
+    <section class="shop spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="shop__sidebar">
+                        <!-- <div class="shop__sidebar__search">
+                            <form action="#">
+                                <input type="text" placeholder="Search...">
+                                <button type="submit"><span class="icon_search"></span></button>
+                            </form>
+                        </div> -->
+                        <div class="shop__sidebar__accordion">
+                            <% 
+                            if(removeFilter === 'true'){
+                                %>
+                                <a href="/shop?page=1"
+                                style="background-color: rgb(141, 141, 252); padding: 2px 6px; color: white;"
+                                >Remove Filter&nbsp;x</a>
+                                <%  
+                            }
+                            %>
+
+                            <div class="accordion" id="accordionExample">
+
+
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                    </div>
+                                    <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__categories">
+                                                <ul class="nice-scroll">
+                                                    <% 
+                                                    categoryNames.forEach((category) => {
+                                                        %>
+                                                        <li>
+                                                            <a href="?category=<%= category._id %>&sortValue=<%= sortValue %>
+                                                                    &brand=<%= brand %>&minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %>
+                                                                    &search=<%= search %>">
+                                                                <%= category.name %>
+                                                            </a>
+                                                        </li>
+                                                        <%  
+                                                    })
+                                                    %>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                          
+                                </div>
+
+
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__brand">
+                                                <ul>
+                                                    <% 
+                                                    brands.forEach((brand) => {
+                                                        %>
+                                                        <li>
+                                                            <a href="?brand=<%= brand._id %>&sortValue=<%= sortValue %>
+                                                                &category=<%= category %>&minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %>
+                                                                &search=<%= search %>">
+                                                                <%= brand._id %>
+                                                            </a>
+                                                        </li>
+                                                        <%  
+                                                    })
+                                                    %>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-heading">
+                                        <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                    </div>
+                                    <div id="collapseThree" class="collapse show" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            <div class="shop__sidebar__price">
+                                                <ul>
+                                                    <li>
+                                                        <a href="?minPrice=0&maxPrice=1999&sortValue=<%= sortValue %>&category=<%= category %>&brand=<%= brand %>&search=<%= search %>">
+                                                            &#8377; 0 - &#8377; 1999
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="?minPrice=2000&maxPrice=3999&sortValue=<%= sortValue %>&category=<%= category %>&brand=<%= brand %>&search=<%= search %>">
+                                                            &#8377; 2000 - &#8377; 3999
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="?minPrice=4000&maxPrice=5999&sortValue=<%= sortValue %>&category=<%= category %>&brand=<%= brand %>&search=<%= search %>">
+                                                            &#8377; 4000 - &#8377; 5999
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="?minPrice=6000&maxPrice=7999&sortValue=<%= sortValue %>&category=<%= category %>&brand=<%= brand %>&search=<%= search %>">
+                                                            &#8377; 6000 - &#8377; 7999
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="?minPrice=8000&maxPrice=9999&sortValue=<%= sortValue %>&category=<%= category %>&brand=<%= brand %>&search=<%= search %>">
+                                                            &#8377; 8000 - &#8377; 9999
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="?minPrice=10000&sortValue=<%= sortValue %>&category=<%= category %>&brand=<%= brand %>&search=<%= search %>">
+                                                            &#8377; 10000+
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+          
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-9">
+                    <div class="row">
+                        <div class="col text-right mr-2 my-2">
+
+                            <a class="text-dark <% if(sortValue == 1){ %> font-weight-bold <% } %>" 
+                                href="?sortValue=1&category=<%=category  %>&brand=<%=brand  %>&minPrice=<%=minPrice  %>&maxPrice=<%=maxPrice  %>&search=<%=search  %>">
+                                &nbsp;Latest&nbsp;
+                            </a> |
+
+                            <a class="text-dark <% if(sortValue == 2){ %> font-weight-bold <% } %>" 
+                                href="?sortValue=2&category=<%=category  %>&brand=<%=brand  %>&minPrice=<%=minPrice  %>&maxPrice=<%=maxPrice  %>&search=<%=search  %>">
+                                &nbsp;Price Low to High&nbsp;
+                            </a> |
+
+                            <a class="text-dark <% if(sortValue == 3){ %> font-weight-bold <% } %>" 
+                                href="?sortValue=3&category=<%=category  %>&brand=<%=brand  %>&minPrice=<%=minPrice  %>&maxPrice=<%=maxPrice  %>&search=<%=search  %>">
+                                &nbsp;Price High to Low&nbsp;
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <% 
+                        if(pdtsData){
+                            for(let i=0; i<pdtsData.length; i++){
+                                %>
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg" data-setbg="/images/productImages/<%= pdtsData[i].images[0] %>"> 
+                                            <% 
+                                            if(pdtsData[i].offer && pdtsData[i].offer.status == 'Available'){
+                                                %>
+                                                <span class="label"><%= pdtsData[i].offer.name %></span>
+                                                <%  
+                                            }
+                                            %>
+                                            <ul class="product__hover">
+
+                                                <li>
+                                                    <% 
+                                                    if(wishlist && wishlist.length && wishlist.includes(pdtsData[i]._id)){
+                                                        %>
+                                                        <a class="btn btn-danger" href="/removeWishlistItem/<%= pdtsData[i]._id %>?returnPage=shop"><i class="bi bi-heart-fill"></i></a>
+                                                        <%  
+                                                    }else{
+                                                        %>
+                                                        <a class="btn btn-dark" href="/addToWishlist/<%= pdtsData[i]._id %>?returnPage=shop"><i class="bi bi-heart-fill"></i></a>
+                                                        <%  
+                                                    }
+                                                    %>
+                                                </li>
+                                                <li><a class="btn btn-dark" href="/shop/productOverview/<%= pdtsData[i]._id %>"><i class="bi bi-search"></i></a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="product__item__text">
+                                            <h6><%= pdtsData[i].name %></h6>
+                                            <% 
+                                            //console.log(cart)
+                                            if(cart && cart.length && cart.includes(pdtsData[i]._id.toString())){
+                                                %>
+                                                <a href="/shoppingCart"  class="add-cart">Go to Cart</a>
+                                                <%  
+                                            }else{
+                                                %>
+                                                <a href="/shop/addToCart/<%= pdtsData[i]._id  %>" class="add-cart">+ Add To Cart</a>
+                                                <%  
+                                            }
+
+
+                                            let currPrice;
+                                            //console.log(pdtsData[i].offer)
+                                            if(pdtsData[i].offer && pdtsData[i].offer.status == 'Available'){
+                                                currPrice = pdtsData[i].offerPrice
+                                            }else{
+                                                currPrice = pdtsData[i].price - pdtsData[i].discountPrice 
+                                            }
+                                            let discountPercentage = Math.floor(100 - ( (currPrice*100) / pdtsData[i].price ));
+                                            %>
+                                            <div class="d-flex align-content-center">
+                                                <div>
+                                                    <h5>&#8377; <%= currPrice  %></h5>
+                                                    <small style="color: grey; text-decoration: line-through;">&#8377; <%= pdtsData[i].price %></small>
+                                                </div>
+                                                <div>
+                                                    <strong class="ml-3" style="color: green;"><%= discountPercentage %>% off</strong>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <% 
+                            } 
+                        }
+                        %>
+
+                    </div>
+
+                    
+                                    
+                    <!-- Pagination  -->
+<!-- Pagination  -->
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="product__pagination  d-flex justify-content-end">
+                                                <% for (let i = 1; i <= pageCount; i++) { %>
+  <a class="<%= i == currentPage ? 'active' : '' %>" href="/shop?page=<%= i %>&sortValue=<%= sortValue %>&category=<%= category %>&brand=<%= brand %>&minPrice=<%= minPrice %>&maxPrice=<%= maxPrice %>">
+    <%= i %>
+  </a>
+<% } %>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Section End -->
+
+  
+
+
+<%- include('../partials/script.ejs') %>
+<%- include('../partials/footer.ejs') %>

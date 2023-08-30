@@ -1,0 +1,29 @@
+
+
+<%- include('../partials/head.ejs') %>
+
+
+            <!-- 500 Start -->
+            <div class="container-fluid py-4 px-4">
+                <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
+                    <div class="col-md-6 text-center p-4">
+                        <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
+                        <h1 class="display-1 fw-bold">500</h1>
+                        <h1 class="mb-4">Internal Server Error</h1>
+                        <p class="mb-4 h4">Sorry, It's a error from us</p>
+
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-primary rounded-pill py-2 px-5 mx-2" href="/">Home</a>
+                            <a class="btn btn-primary rounded-pill py-2 px-5 mx-2 text-white" onclick="goback()">Go Back</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- 500 End -->
+
+<script>
+    function goback(){
+        window.history.back()
+    }
+</script>

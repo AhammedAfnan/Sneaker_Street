@@ -1,0 +1,434 @@
+<%- include('../partials/head.ejs') %>
+<%- include('../partials/userHeader.ejs') %>
+<%- include('../partials/userBreadcrub.ejs') %>
+
+
+    <!-- Shop Details Section Begin -->
+    <section class="shop-details">
+        <div class="product__details__pic">
+            <div class="container">
+
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-3">
+                        <ul class="nav nav-tabs" role="tablist">
+
+                            <% 
+                            for(let i=0; i<pdtData.images.length; i++){
+                                %>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#" role="tab">
+                                        <img src="/images/productImages/<%= pdtData.images[i] %>" id="<%= pdtData.images[i] %>" alt="product image"
+                                        onclick="imgClick(this.id)">
+                                    </a>
+                                </li>
+
+                                <% 
+                            }
+                            %>
+
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-6 col-md-9">
+                        <div class="tab-content">
+
+                            <div class="tab-pane active" id="imgtab" role="tabpanel">
+                                <div class="product__details__pic__item main-image xbjhsa" style="overflow: hidden; height: 400px;">
+                                    <img src="/images/productImages/<%= pdtData.images[0] %>" alt="Main Image" id="main-img">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="product__details__content">
+            <div class="container">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="product__details__text">
+                            <h4><%= pdtData.name %></h4>
+
+                            <h3>&#8377;<%= pdtData.price - pdtData.discountPrice %> <span>&#8377;<%= pdtData.price %></span></h3>
+                            <p><%= pdtData.description %></p>
+                            <!-- Sizes and Color  -->
+                            <!-- <div class="product__details__option">
+                                <div class="product__details__option__size">
+                                    <span>Size:</span>
+                                    <label for="xxl">xxl
+                                        <input type="radio" id="xxl">
+                                    </label>
+                                    <label class="active" for="xl">xl
+                                        <input type="radio" id="xl">
+                                    </label>
+                                    <label for="l">l
+                                        <input type="radio" id="l">
+                                    </label>
+                                    <label for="sm">s
+                                        <input type="radio" id="sm">
+                                    </label>
+                                </div>
+                                <div class="product__details__option__color">
+                                    <span>Color:</span>
+                                    <label class="c-1" for="sp-1">
+                                        <input type="radio" id="sp-1">
+                                    </label>
+                                    <label class="c-2" for="sp-2">
+                                        <input type="radio" id="sp-2">
+                                    </label>
+                                    <label class="c-3" for="sp-3">
+                                        <input type="radio" id="sp-3">
+                                    </label>
+                                    <label class="c-4" for="sp-4">
+                                        <input type="radio" id="sp-4">
+                                    </label>
+                                    <label class="c-9" for="sp-9">
+                                        <input type="radio" id="sp-9">
+                                    </label>
+                                </div>
+                            </div> -->
+                            <div class="product__details__cart__option">
+                                <!-- <div class="quantity">
+                                    <div class="pro-qty">
+                                        <input type="text" value="1">
+                                    </div>
+                                </div> -->
+                                <% 
+                                if(isPdtExistInCart){
+                                    %>
+                                    <a href="/shoppingCart" class="primary-btn">go to cart</a>
+                                    <%  
+                                }else{
+                                    %>
+                                    <a href="/shop/addToCart/<%= pdtData._id %>" class="primary-btn">add to cart</a>
+                                    <%  
+                                }
+
+                                if(isPdtAWish){
+                                    %>
+                                    <a href="/removeWishlistItem/<%= pdtData._id %>?returnPage=productOverview" style="background-color: red;" class="primary-btn"><i class="bi bi-heart-fill"></i></a>
+                                    <%  
+                                }else{
+                                    %>
+                                    <a href="/addToWishlist/<%= pdtData._id %>?returnPage=productOverview" class="primary-btn"><i class="bi bi-heart-fill"></i></a>
+                                    <%  
+                                }
+                                %>
+                            </div>
+                            <!-- <div class="product__details__btns__option">
+                                <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
+                                <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
+                            </div> -->
+                            <div class="product__details__last__option">
+                                <h5><span>Guaranteed Safe Checkout</span></h5>
+                                <img src="/img/shop-details/details-payment.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        
+        <div class="ratingAndReview mt-5 mx-3">
+            <hr>
+            <div class="d-flex justify-content-between">
+                <h3>Rating and Reviews</h3>
+                <% 
+                if(!isUserReviewed){
+                    %>
+                    <button class="btn roundded-0 p-2 text-dark" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
+                        <a href="/addReview/<%=pdtData._id%>" class="text-dark">Rate Product</a>
+                    </button>
+                    <%  
+                }else{
+                    %>
+                    <button class="btn roundded-0 p-2 text-dark" style="box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
+                        <a href="/editReview/<%=pdtData._id%>" class="text-dark">Edit Review</a>
+                    </button>
+                    <%  
+                }
+                %>
+            </div>
+            <div class="mt-4">
+                <div class="row">
+                    <% 
+                    if(pdtData && pdtData.reviews.length){
+                        for(let i=0; i<pdtData.reviews.length && i<4; i++){
+                            %>
+                            <div class="col-md-6 mb-3">
+                                <div class="p-3" style="border: 1px solid rgb(222, 222, 222);">
+                                    <div class=" ">
+                                        <div class="d-flex align-items-center">
+        
+                                            <div <% if(pdtData.reviews[i].rating > 2) {%>
+                                                    style="background-color: rgb(17, 201, 0);border-radius: 4px;padding: 2px 5px;"
+                                                <% } else if(pdtData.reviews[i].rating == 2){%>
+                                                    style="background-color: rgb(255,150,13);border-radius:4px;padding: 2px 5px;"
+                                                <% } else if(pdtData.reviews[i].rating == 1){%>
+                                                    style="background-color: rgb(237, 40, 33);border-radius:4px;padding: 2px 5px;"
+                                                <% } %>>
+                                                <span class="text-white">
+                                                    <%= pdtData.reviews[i].rating %> 
+                                                    <i class="bi bi-star-fill text-white"></i>
+                                                </span>
+                                            </div>
+        
+                                            <strong class="ml-2" style="font-size: 1.2rem;">
+                                                <%= pdtData.reviews[i].title %>
+                                            </strong>
+        
+                                        </div>
+                                        <div class="review-content mt-2">
+                                            <span class="">
+                                                <%= pdtData.reviews[i].description %>
+                                            </span><br>
+                                            <span class="text-secondary" style="font-size: .8rem;">
+                                                <strong class=" text-uppercase ">
+                                                    <%= pdtData.reviews[i].userId.fname %>
+                                                    <%= pdtData.reviews[i].userId.lname %>&nbsp;
+                                                    <i class="bi bi-patch-check-fill  me-2"></i>
+                                                </strong>
+                                                Certified Buyer,
+                                                <% 
+                                                const dd=pdtData.reviews[i].createdAt.getDate(); 
+                                                const mm=pdtData.reviews[i].createdAt.getMonth() + 1; 
+                                                const yyyy=pdtData.reviews[i].createdAt.getFullYear(); 
+                                                const formattedDate=`${dd}-${mm}-${yyyy}`; 
+                                                %>
+                                                <span>
+                                                    <%=formattedDate %>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%  
+                        }
+                        console.log('review length : '+pdtData.reviews.length)
+                        if(pdtData.reviews.length > 4){
+                            %>
+                            <div class=" p-2 text-center">
+                                <a href="/allReviews/<%= pdtData._id %>"
+                                    class="btn btn-sm btn-dark">See all Reviews</a>
+                            </div>
+                            <%  
+                        }
+                    }
+                    %>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </section>
+     <!-- Shop Details Section End -->
+
+     <!-- Related Section Begin -->
+     <!-- <section class="related spad">
+    //     <div class="container">
+    //         <div class="row">
+    //             <div class="col-lg-12">
+    //                 <h3 class="related-title">Related Product</h3>
+    //             </div>
+    //         </div>
+    //         <div class="row">
+    //             <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+    //                 <div class="product__item">
+    //                     <div class="product__item__pic set-bg" data-setbg="/img/product/product-1.jpg">
+    //                         <span class="label">New</span>
+    //                         <ul class="product__hover">
+    //                             <li><a href="#"><img src="/img/icon/heart.png" alt=""></a></li>
+    //                             <li><a href="#"><img src="/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+    //                             <li><a href="#"><img src="/img/icon/search.png" alt=""></a></li>
+    //                         </ul>
+    //                     </div>
+    //                     <div class="product__item__text">
+    //                         <h6>Piqué Biker Jacket</h6>
+    //                         <a href="#" class="add-cart">+ Add To Cart</a>
+    //                         <div class="rating">
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                         </div>
+    //                         <h5>$67.24</h5>
+    //                         <div class="product__color__select">
+    //                             <label for="pc-1">
+    //                                 <input type="radio" id="pc-1">
+    //                             </label>
+    //                             <label class="active black" for="pc-2">
+    //                                 <input type="radio" id="pc-2">
+    //                             </label>
+    //                             <label class="grey" for="pc-3">
+    //                                 <input type="radio" id="pc-3">
+    //                             </label>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+    //                 <div class="product__item">
+    //                     <div class="product__item__pic set-bg" data-setbg="/img/product/product-2.jpg">
+    //                         <ul class="product__hover">
+    //                             <li><a href="#"><img src="/img/icon/heart.png" alt=""></a></li>
+    //                             <li><a href="#"><img src="/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+    //                             <li><a href="#"><img src="/img/icon/search.png" alt=""></a></li>
+    //                         </ul>
+    //                     </div>
+    //                     <div class="product__item__text">
+    //                         <h6>Piqué Biker Jacket</h6>
+    //                         <a href="#" class="add-cart">+ Add To Cart</a>
+    //                         <div class="rating">
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                         </div>
+    //                         <h5>$67.24</h5>
+    //                         <div class="product__color__select">
+    //                             <label for="pc-4">
+    //                                 <input type="radio" id="pc-4">
+    //                             </label>
+    //                             <label class="active black" for="pc-5">
+    //                                 <input type="radio" id="pc-5">
+    //                             </label>
+    //                             <label class="grey" for="pc-6">
+    //                                 <input type="radio" id="pc-6">
+    //                             </label>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+    //                 <div class="product__item sale">
+    //                     <div class="product__item__pic set-bg" data-setbg="/img/product/product-3.jpg">
+    //                         <span class="label">Sale</span>
+    //                         <ul class="product__hover">
+    //                             <li><a href="#"><img src="/img/icon/heart.png" alt=""></a></li>
+    //                             <li><a href="#"><img src="/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+    //                             <li><a href="#"><img src="/img/icon/search.png" alt=""></a></li>
+    //                         </ul>
+    //                     </div>
+    //                     <div class="product__item__text">
+    //                         <h6>Multi-pocket Chest Bag</h6>
+    //                         <a href="#" class="add-cart">+ Add To Cart</a>
+    //                         <div class="rating">
+    //                             <i class="fa fa-star"></i>
+    //                             <i class="fa fa-star"></i>
+    //                             <i class="fa fa-star"></i>
+    //                             <i class="fa fa-star"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                         </div>
+    //                         <h5>$43.48</h5>
+    //                         <div class="product__color__select">
+    //                             <label for="pc-7">
+    //                                 <input type="radio" id="pc-7">
+    //                             </label>
+    //                             <label class="active black" for="pc-8">
+    //                                 <input type="radio" id="pc-8">
+    //                             </label>
+    //                             <label class="grey" for="pc-9">
+    //                                 <input type="radio" id="pc-9">
+    //                             </label>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //             <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+    //                 <div class="product__item">
+    //                     <div class="product__item__pic set-bg" data-setbg="/img/product/product-4.jpg">
+    //                         <ul class="product__hover">
+    //                             <li><a href="#"><img src="/img/icon/heart.png" alt=""></a></li>
+    //                             <li><a href="#"><img src="/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
+    //                             <li><a href="#"><img src="/img/icon/search.png" alt=""></a></li>
+    //                         </ul>
+    //                     </div>
+    //                     <div class="product__item__text">
+    //                         <h6>Diagonal Textured Cap</h6>
+    //                         <a href="#" class="add-cart">+ Add To Cart</a>
+    //                         <div class="rating">
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                             <i class="fa fa-star-o"></i>
+    //                         </div>
+    //                         <h5>$60.9</h5>
+    //                         <div class="product__color__select">
+    //                             <label for="pc-10">
+    //                                 <input type="radio" id="pc-10">
+    //                             </label>
+    //                             <label class="active black" for="pc-11">
+    //                                 <input type="radio" id="pc-11">
+    //                             </label>
+    //                             <label class="grey" for="pc-12">
+    //                                 <input type="radio" id="pc-12">
+    //                             </label>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //     </div>
+    // </section> -->
+     <!-- Related Section End -->
+
+
+
+<%- include('../partials/footer.ejs') %> 
+
+<script>
+
+    const mainImage = document.querySelector('.main-image');
+    const img = document.getElementById('main-img');
+
+    mainImage.addEventListener('mousemove', zoomIn);
+    mainImage.addEventListener('mouseleave', zoomOut);
+
+    function zoomIn(event) {
+        const boundingRect = mainImage.getBoundingClientRect();
+        const mouseX = event.clientX - boundingRect.left;
+        const mouseY = event.clientY - boundingRect.top; 
+
+        const offsetX = (mouseX / boundingRect.width) * 100;
+        const offsetY = (mouseY / boundingRect.height) * 100;
+
+        img.style.transformOrigin = `${offsetX}% ${offsetY}%`;
+        img.style.transform = 'scale(2)'; // Adjust the scale factor as desired
+    }
+
+    function zoomOut() {
+        img.style.transform = 'scale(1)';
+    }
+
+    function imgClick(id) {
+
+        let img = document.getElementById(id).src
+        document.getElementById('main-img').src = img
+
+    }
+
+    function selectLabel(element) {
+        var labels = document.querySelectorAll('.custom-label');
+        for (var i = 0; i < labels.length; i++) {
+            labels[i].classList.remove('selected');
+        }
+
+        element.classList.add('selected');
+    }
+    // 
+    window.addEventListener('resize', slideImage);
+
+</script>
+
+<%- include('../partials/script.ejs') %>

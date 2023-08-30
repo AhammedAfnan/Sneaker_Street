@@ -1,0 +1,454 @@
+
+<%- include('../partials/head.ejs') %>
+<%- include('../partials/userHeader.ejs') %>
+<%- include('../partials/userBreadcrub.ejs') %>
+
+
+
+
+    <!-- Checkout Section Begin -->
+    <section>
+        <div class="container">
+            <div class="my-5">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6" >
+                            <h2 class="">Billing Details</h2>
+                            <hr>
+                            <div class="cart__discount">
+                                <h6>Apply Coupons</h6>
+                                <form action="" id="applyCoupon" method="" class="form-group d-flex applyCoupon">
+                                    <input type="text" name="code" class="form-group rounded-0 flex-grow-1 border border-bottom-1" style="height: 40px; border-bottom: 1;" placeholder="Enter Coupon code">
+                                    <button type="submit" class="btn btn-dark rounded-0" style="margin-left: -5px; height: 40px;">Apply</button>
+                                </form>
+                                <div style="position: relative; top: 10px;">
+                                    <a class="text-primary" style="cursor: pointer;" data-toggle="modal" data-target="#exploreCouponsModal">
+                                        Explore Coupons
+                                    </a>
+                                    <h6 class="text-danger" id="couponErr"></h6>
+                                </div>
+                            </div>
+
+                <form action="/shoppingCart/placeOrder" method="post" id="checkout-form">
+                            <% 
+                            if(userAddress){
+                                userAddress.addresses.forEach((address) => {
+                                    %>
+                                    <div class="card mb-3">
+                                        <div class="card-body d-flex">
+                                            <div class="mx-3">
+                                                <input type="radio" name="address" id="<%= address._id %>" value="<%= address._id %>" checked>
+                                            </div>
+                                            <div>
+                                                <h5 class="card-title"><%= address.userName %> <%= address.mobile %></h5>
+                                                <p><%= address.email %></p>
+                                                <p class="card-text"> 
+                                                    <%= 
+                                                    address.town+' '+address.state+" "+address.country+" "+address.zip+' \n '+address.address
+                                                    %>
+                                                </p>
+                                                <!-- <a href="#" class="btn btn-primary">Edit</a> -->
+                                                <a href="/profile/editAddress/<%= address._id %>?returnPage=checkout">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <%  
+                                })
+                            }
+
+                            if(userAddress && userAddress.addresses.length >= 5){
+                                %>
+                                <div class="row d-flex justify-content-end mx-3">
+                                    <p>You can add max of 5 Addresses</p>
+                                </div>
+                                <%
+                            }else{
+                                %>
+                                <div class="row d-flex justify-content-end mx-3">
+                                    <a href="/profile/addAddress?returnPage=checkout" class="btn btn-dark"  >Add Address</a>
+                                </div>
+                                <%
+                            }
+                            %>
+
+
+                        </div>
+
+                        <!-- right side -->
+                        <div class="col-lg-4 col-md-6 mt-5 ps-2">
+
+
+
+                            <div class="px-3 pt-3 pb-5 " style="background-color: #EBEFF1;">
+                                <div class="">
+                                    <div>
+                                        <h3>Your Order</h3>
+                                    </div>
+                                    <hr>
+                                    <div class="">
+
+
+                                        <% 
+
+                                        cart.forEach((pdt) => {
+                                            %>
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <div class="mt-3 pb-2">
+                                                        <span><%= pdt.productId.name %> x <%= pdt.quantity %></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="mt-3 pb-2">
+                                                        <span>₹ <%= pdt.productId.price*pdt.quantity %></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% 
+                                        })
+                                        
+                                        %>
+
+
+
+                                        
+                                    </div>
+                                    <div class="mt-4 mb-4">
+                                        <hr>
+                                    </div>
+
+                                    <!-- price -->
+
+                                    <% 
+                                    //console.log(cart)
+                                    let totalPrice = 0;
+                                    let totalDiscount = 0
+                                    for(let i=0; i<cart.length; i++){
+                                        totalPrice += cart[i].productId.price*cart[i].quantity
+                                        if(cart[i].productId.offerPrice){
+                                            totalDiscount += (cart[i].productId.price - cart[i].productId.offerPrice)*cart[i].quantity
+                                        }else{
+                                            totalDiscount += cart[i].productId.discountPrice*cart[i].quantity
+                                        }
+                                    }
+                                    %>
+
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <div class="mb-3">
+                                                <span><strong>SubTotal</strong></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <span><strong>Discount</strong></span>
+                                            </div>
+                                            <div class="mb-3" id="couponDiscountLabelDiv" hidden>
+                                                <span>
+                                                    <strong>Coupon Discount</strong>
+                                                    <a href="" onclick="removeCoupon()">remove</a>
+                                                </span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <span><strong>Total</strong></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="mb-3">
+                                                <span>₹ <%= totalPrice %></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <span style="color: rgb(0, 164, 19);">-₹ <%= totalDiscount %></span>
+                                            </div>
+                                            <div class="mb-3" id="couponDiscountDiv" hidden>
+                                                <span id="couponDiscount" style="color: rgb(0, 164, 19);"></span>
+                                            </div>
+                                            <div class="mb-3">
+                                                <% 
+                                                let payAmount = totalPrice-totalDiscount
+                                                %>
+                                                <span id="payAmount"><strong>₹ <%= payAmount %></strong> </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <!-- Payment Method -->
+                
+                                    <div class="mb-2">
+                                        <h5 class="mb-4">Choose Payment</h5>
+
+                                        <% 
+                                        if(walletBalance > 0){
+                                            %>
+                                            <div id="walletCheckBoxDiv" <% if(walletBalance >= payAmount){ %> hidden <% } %>>
+                                                <input type="checkbox" name="walletCheckBox" id="walletCheckBox">
+                                                <label for="walletCheckBox">
+                                                    <strong>
+                                                        Use wallet Balance <span> &#8377; <%= walletBalance %> </span>
+                                                    </strong>
+                                                </label>
+                                            </div>
+                                            <%  
+                                        }
+                                        %>
+
+                                        <input type="radio" name="payment" id="COD"  value="COD" class="mx-2" ><label for="payment">COD</label><br>
+
+                                        <input type="radio" name="payment" id="Razorpay"  value="Razorpay" class="mx-2" ><label for="payment">Razorpay</label><br>
+
+                                        <input type="radio" name="payment" id="Wallet"  value="Wallet" class="mx-2" <% if(walletBalance < payAmount){  %> hidden <% } %> >
+                                        <label for="payment" <% if(walletBalance < payAmount){  %> hidden <% } %> >Wallet <strong>&#8377;<%= walletBalance %></strong></label><br>
+
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit"class="btn rounded-pill w-100 btn-dark" <% if(!userAddress){  %> disabled <%  } %>>Place Order</button>
+                                    <% if(!userAddress){  %> <p>Add address to place order</p> <%  } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+
+  
+  <!-- Explore Coupons Modal Start -->
+  <div class="modal fade" id="exploreCouponsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Explore Coupons</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+            <% 
+            if(coupons && coupons.length){
+                coupons.forEach(coupon => {
+                    %>
+                    <div class="card px-2 mb-4">
+                        <div class="coupon bg-white rounded mb-3 d-flex justify-content-between border-1">
+
+                            <div class="tengah  d-flex w-100 justify-content-start">
+                                <div class="p-2">
+                                    <% 
+                                    if(coupon.usedUsers.includes(userId)){
+                                        %>
+                                        <span class="badge badge-danger my-1">Used</span>
+                                        <%  
+                                    }else{
+                                        %>
+                                        <span class="badge badge-success my-1">Not Used</span>
+                                        <% 
+                                    }
+                                    %>
+                                    <h4 class="lead my-1"><strong>
+                                            <%=coupon.code %>
+                                        </strong></h4>
+                                    <p class="text-muted mb-0 my-1">
+                                        <%= coupon.description %>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="info m-3 mt-4">
+                                    <!-- <form action="" class="applyCouponModal" method="post"> -->
+                                        <!-- <input type="text" value="<%=// coupon.code  %>" name="code" > -->
+                                            
+                                        <a id="<%= coupon.code %>" class="btn btn-sm btn-outline-secondary btn-block" onclick="copyCoupon('<%= coupon.code  %>')">
+                                            COPY
+                                        </a>
+                                    <!-- </form> -->
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <%  
+                })
+            }else{
+                %>
+                <small>No Coupons Available</small>
+                <%  
+            }
+            %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Explore Coupons Modal End -->
+
+<%- include('../partials/footer.ejs') %>  
+
+<!-- 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+</script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    $('#checkout-form').submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url:'/shoppingCart/placeOrder',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: (res) => {
+                if(res.status == 'COD'){
+                    location.href = '/orderSuccess?result=success'
+                }else if(res.status == 'Razorpay'){
+                    razorpayPayment(res.order)
+                }else if(res.status == 'Wallet'){
+                    location.href = '/orderSuccess?result=success'
+                }
+            }
+        });
+    });
+
+    function razorpayPayment(order){
+        var options = {
+            "key": "rzp_test_YIBGruPq0XZXiO", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Sneaker Street",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response){
+                verifyPayment(response,order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Sneaker Street Pvt Ltd"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzpl = new Razorpay(options)
+        rzpl.open()
+    }
+
+function verifyPayment(response,order){
+    // console.log(response,order);
+    // console.log('in verify payment function in checkout');
+    $.ajax({
+        url:'/verifyPayment',
+        method:'post',
+        data:{
+            response,
+            order
+        },
+        success:(res) => {
+            // console.log(res);
+            if(res.status == true){
+                location.href = '/orderSuccess?result=success'
+            }else{
+                location.href = '/orderSuccess?result=failed'
+            }
+        }
+    });
+}
+</script>
+
+<script>
+    $('#applyCoupon').submit((e) => {
+        e.preventDefault()
+
+        $.ajax({
+            url:'/applyCoupon',
+            method: 'post',
+            data: $('#applyCoupon').serialize(),   //$(this).serialize(),
+            success: (res) => {
+                if( res.status === true ){
+                    $('#couponDiscount').html(`-₹ ${res.couponDiscount}`)
+                    $('#payAmount').html(`₹ ${res.payAmount}`)
+                    document.getElementById('couponDiscountDiv').hidden = false
+                    document.getElementById('couponDiscountLabelDiv').hidden = false
+                    $('#couponErr').html('')
+
+                    const walletCheckBoxDiv = document.getElementById('walletCheckBoxDiv')
+                    const walletCheckBox = document.getElementById('walletCheckBox')
+                    const razorpayRadio = document.getElementById('Razorpay')
+                    const COD = document.getElementById('COD')
+
+                    if(res.isWalletHasPayAmount){
+                        walletCheckBoxDiv.hidden = false;
+                        walletCheckBox.hidden = true;
+                    }
+                }else{
+                    $('#couponErr').html(res.message)
+
+                }
+            }
+        })
+    })
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const walletCheckBox = document.getElementById('walletCheckBox');
+        const razorpayRadio = document.getElementById('Razorpay')
+        const CODRadio = document.getElementById('COD')
+
+        function updatePaymentOptions(){
+            if(walletCheckBox.checked){
+                CODRadio.disabled = true
+                CODRadio.checked = false
+                razorpayRadio.checked = true
+            }else{
+                CODRadio.disabled = false
+            }
+        }
+
+        //For initial setup of options
+        updatePaymentOptions()
+
+        //Listens to changes of options and update payment options
+        walletCheckBox.addEventListener('change',updatePaymentOptions);
+    });
+    
+</script>
+
+<script>
+    function removeCoupon() {
+        $.ajax({
+            url: '/removeCoupon',
+            method: 'get',
+            success: (res) => {
+                if (res.status == true) {
+                    location.reload()
+                }
+            }
+        })
+    }
+</script>
+<script>
+    function copyCoupon(couponName) {
+        document.getElementById(couponName).innerHTML = "COPIED"
+        navigator.clipboard.writeText(couponName);
+    }
+</script>
+
+<%- include('../partials/script.ejs') %>

@@ -1,0 +1,191 @@
+<%- include('../partials/head.ejs') %> <%- include('../partials/userHeader.ejs')
+%>
+
+<!-- Hero Section Begin -->
+<section class="hero">
+  <div class="hero__slider owl-carousel">
+    <div class="hero__items set-bg" data-setbg="img/hero/Main3.jpg">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-5 col-lg-7 col-md-8">
+            <div class="hero__text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__items set-bg" data-setbg="img/hero/hero-2.jpg">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-5 col-lg-7 col-md-8">
+            <div class="hero__text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Hero Section End -->
+
+<!-- Banner Section Begin -->
+<% if(banners && banners.length> 0){ %>
+<section class="banner spad">
+  <div class="container">
+    <div class="row">
+      <% banners.forEach((banner, index) => { if(index%2 == 0){ %>
+      <div class="col-lg-7 offset-lg-4">
+        <div class="banner__item">
+          <div class="banner__item__pic">
+            <img
+              src="/images/bannerImages/<%= banner.image %>"
+              alt="Banner image"
+            />
+          </div>
+          <div class="banner__item__text">
+            <h2><%= banner.heading %></h2>
+            <a href="<%= banner.url %>">Shop now</a>
+          </div>
+        </div>
+      </div>
+      <% }else{ %>
+      <div class="col-lg-5">
+        <div class="banner__item banner__item--middle">
+          <div class="banner__item__pic">
+            <img
+              src="/images/bannerImages/<%= banner.image %>"
+              alt="Banner image"
+            />
+          </div>
+          <div class="banner__item__text">
+            <h2><%= banner.heading %></h2>
+            <a href="<%= banner.url %>">Shop now</a>
+          </div>
+        </div>
+      </div>
+      <% } }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+<!-- <section class="banner spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 offset-lg-4">
+                    <div class="banner__item">
+                        <div class="banner__item__pic">
+                            <img src="img/banner/banner-1.jpg" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2>Clothing Collections 2030</h2>
+                            <a href="#">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="banner__item banner__item--middle">
+                        <div class="banner__item__pic">
+                            <img src="img/banner/banner-2.jpg" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2>Accessories</h2>
+                            <a href="#">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="banner__item banner__item--last">
+                        <div class="banner__item__pic">
+                            <img src="img/banner/banner-3.jpg" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2>Shoes Spring 2030</h2>
+                            <a href="#">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+<!-- Banner Section End -->
+
+<!-- Categories Section Begin -->
+<section class="categories spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="categories__text"></div>
+      </div>
+      <div class="col-lg-4">
+        <div class="categories__hot__deal">
+          <img src="images/productImages/shoe1.webp" alt="" />
+          <div class="hot__deal__sticker">
+            <span>Sale Of</span>
+            <h5>24,999</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 offset-lg-1">
+        <div class="categories__deal__countdown">
+          <h2>Multi-pocket Chest Bag Black</h2>
+          <a
+            href="/shop/productOverview/64e5fc6f2368443b883c9976"
+            class="primary-btn"
+            >Shop now</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Categories Section End -->
+
+<!-- Instagram Section Begin -->
+<section class="instagram spad">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="instagram__pic">
+          <div
+            class="instagram__pic__item set-bg"
+            data-setbg="img/instagram/insta1.webp"
+          ></div>
+          <div
+            class="instagram__pic__item set-bg"
+            data-setbg="img/instagram/insta2.jpg"
+          ></div>
+          <div
+            class="instagram__pic__item set-bg"
+            data-setbg="img/instagram/insta3.webp"
+          ></div>
+          <div
+            class="instagram__pic__item set-bg"
+            data-setbg="img/instagram/insta4.jpg"
+          ></div>
+          <div
+            class="instagram__pic__item set-bg"
+            data-setbg="img/instagram/insta5.jpg"
+          ></div>
+          <div
+            class="instagram__pic__item set-bg"
+            data-setbg="img/instagram/insta6.jpg"
+          ></div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="instagram__text">
+          <h2>Instagram</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          </p>
+          <h3>#Sneaker Street</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Instagram Section End -->
+
+<!-- Latest Blog Section Begin -->
+
+<%- include('../partials/footer.ejs') %> <%- include('../partials/script.ejs')
+%>

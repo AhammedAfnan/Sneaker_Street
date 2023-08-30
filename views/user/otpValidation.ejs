@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <style>
+    #erro {
+      color: red;
+    }
+  </style>
+
+<body>
+    <section class="vh-100">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-12 col-md-9 col-sm-12">
+            <div class="card shadow-2-strong">
+              <div class="p-5 text-center">
+                <div class="text-center">
+                  <h3 class="mb-3">OTP Verification</h3>
+                </div>
+                <form action="/validateOTP" method="post" id="otpForm">
+                  <div class="form-outline mb-3 row">
+                    <div class="col-12 mb-3">
+                      <input
+                        type="number"
+                        id="otp"
+                        class="form-control form-control-md rounded-0"
+                        placeholder="Enter OTP"
+                        name="OTP"
+                        required
+                      />
+                      <input type="hidden" name="fname" value="<%= fname %>" />
+                      <input type="hidden" name="lname" value="<%= lname %>" />
+                      <input type="hidden" name="email" value="<%= email %>" />
+                      <input
+                        type="hidden"
+                        name="mobile"
+                        value="<%= mobile %>"
+                      />
+                      <input
+                        type="hidden"
+                        name="password"
+                        value="<%= password %>"
+                      />
+                      <input
+                        type="hidden"
+                        name="referral"
+                        value="<%= referral %>"
+                      />
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <button
+                      class="btn btn-dark btn-md rounded-pill px-5 py-2 login-btn"
+                      type="submit"
+                    >
+                      Verify
+                    </button>
+                    <p><span id="erro"><%= message %></span></p>
+                  </div>
+                </form>
+            </form>
+            <p id="countdownText">Time remaining: <span id="countdown">10</span> seconds</p>
+<div id="resendOTPmsg">
+  <button
+    id="resendButton"
+    class="border-0 mx-auto"
+    style="color: rgb(233, 233, 240); background-color: rgb(8, 8, 8);"
+    onclick="resendOTP('<%= email %>')"
+  >
+    Resend OTP
+  </button>
+</div>
+
+            
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script>
+  function startCountDown(targetElementId) {
+    let start = 10; // Set the countdown to start from 10
+    const countdown = document.getElementById("countdown");
+    const countdownText = document.getElementById("countdownText");
+    const resendButton = document.getElementById(targetElementId);
+
+    countdownText.style.display = "block";
+    resendButton.style.display = "none";
+    countdown.textContent=start;
+
+    const timer = setInterval(() => {
+      if(start>1){
+        start--;
+        countdown.textContent = start; // Update the countdown value
+      }else{
+        clearInterval(timer);
+        countdownText.style.display = "none";
+        resendButton.style.display = "block";
+      }
+    }, 1000);
+  }
+
+  // Start the countdown when the page loads
+  startCountDown("resendButton");
+</script>
+
+<script>
+  function resendOTP(email) {
+    $.ajax({
+      url: "/resendOTP",
+      method: "post",
+      data: { email },
+      success: (res) => {
+        if (res.isResend) {
+          // $('#resendOTPmsg').html('OTP Resent Successfully :)');
+          startCountDown("resendButton"); // Start the countdown for resend button
+        } else {
+          $('#resendOTPmsg').html('Error Occured while resending :( ');
+        }
+      }
+    });
+  }
+</script>
