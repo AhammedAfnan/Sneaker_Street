@@ -5,6 +5,7 @@ const User = require("../models/userModel");
 const Orders = require("../models/orderModel");
 const fs = require("fs");
 const path = require("path");
+const { v4 } = require('uuid')
 
 const loadProduct = async (req, res, next) => {
   try {
@@ -46,14 +47,8 @@ const addProductDetails = async (req, res, next) => {
       price,
       dprice,
       description,
+      images
     } = req.body;
-
-    console.log(req.files);
-
-    let images = [];
-    for (let file of req.files) {
-      images.push(file.filename);
-    }
 
     let size = [];
     if (check1) size.push(check1);
@@ -75,6 +70,7 @@ const addProductDetails = async (req, res, next) => {
       discountPrice: dprice,
       quantity,
       images,
+      productId: v4(),
       createdAt: new Date(),
     }).save();
 
@@ -660,6 +656,29 @@ const removeProductOffer = async (req, res, next) => {
   }
 };
 
+const showAddStock = async (req, res, next) => {
+  const { id } = req.params
+  try {
+    res.render('addStock', { id, page: "Products" })
+  } catch (error) {
+    next(error)
+  }
+}
+
+const addStock = async (req, res, next) => {
+  const { id } = req.params
+  const { stock } = req.body
+  
+  try {
+    if (!stock) return res.render('addStock', { page: 'Products', error: 'Stock is required.', id })
+    const product = await Products.findByIdAndUpdate(id, {$inc: { quantity: stock }}, { new: true })
+    res.redirect('/admin/products')
+  } catch (error) {
+    next(error)
+  }
+}
+
+
 module.exports = {
   loadProduct,
   loadAddProduct,
@@ -677,4 +696,6 @@ module.exports = {
   postAddReview,
   postEditReview,
   loadAllReviews,
+  showAddStock,
+  addStock,
 };

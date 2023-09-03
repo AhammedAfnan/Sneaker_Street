@@ -5,6 +5,8 @@ const Orders = require("../models/orderModel");
 const Coupons = require("../models/couponModel");
 require("dotenv").config();
 const Razorpay = require("razorpay");
+const ReturnReason = require("../models/returnReasonModel");
+const returnReasonModel = require("../models/returnReasonModel");
 
 var instance = new Razorpay({
   key_id: process.env.KEY_ID,
@@ -472,6 +474,21 @@ const loadOrdersList = async (req, res, next) => {
       .skip((pageNum - 1) * limit)
       .limit(limit);
 
+    // console.log(ordersData[0].products);
+    
+    const reasons = await Promise.all(
+      ordersData.map(order => {
+        order.products.map(async pdt => {
+          const reason = await returnReasonModel.findOne({ productId: pdt._id })
+          if (reason) {
+            return reason
+          }
+        })
+      })
+    )
+
+    console.log(reasons);
+
     res.render("ordersList", {
       ordersData,
       page: "Orders List",
@@ -823,7 +840,15 @@ const returnOrder = async (req, res, next) => {
 const returnSinglePdt = async (req, res, next) => {
   try {
     const { orderId, pdtId } = req.params;
+    const { reason } = req.body;
+    // return console.log(reason, req.session);
     const orderData = await Orders.findById({ _id: orderId });
+    const returnReason = await ReturnReason.create({
+      userId: req.session.userId,
+      productId: pdtId,
+      orderId,
+      reason,
+    })
 
     for (const pdt of orderData.products) {
       if (pdt._id == pdtId) {
@@ -929,6 +954,11 @@ const loadInvoice = async (req, res, next) => {
   }
 };
 
+const showReturnReason = (req, res, next) => {
+  const { orderId, pdtId } = req.params
+  res.render('returnreason', { orderId, pdtId })
+}
+
 module.exports = {
   loadCheckout,
   placeOrder,
@@ -945,4 +975,5 @@ module.exports = {
   loadInvoice,
   returnSinglePdt,
   approveReturnForSinglePdt,
+  showReturnReason,
 };

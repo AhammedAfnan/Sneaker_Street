@@ -1,0 +1,52 @@
+
+<%- include('../partials/adminAside.ejs') %>
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+
+   <%- include('../partials/adminNavbar.ejs') %>
+
+ <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card my-4">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between">
+              <h6 class="text-white text-capitalize ps-3">Add Product</h6>
+
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0">
+
+                <form class="p-4" action="/admin/products/addstock/<%= id %>" method="post">
+                    <% if (typeof error !== "undefined") { %>
+                        <div class="alert alert-danger"><%= error %></div>
+                    <% } %>
+                    <div class="row input-group input-group-outline mb-3">
+                        <div class="form-group col-md-4">
+                            <label for="stock">Stock</label>
+                            <input type="number" class="form-control " name="stock" id="stock" placeholder="stock">
+                            <small id="brandErr" class="error"></small>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Add Stock</button>
+                    </div>
+                </form>
+
+                <!-- Copeid Code End -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../partials/adminFooter.ejs') %>      
+
+</main>
+
+
+<%- include('../partials/adminScript.ejs') %>

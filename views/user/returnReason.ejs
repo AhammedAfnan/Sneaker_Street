@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Return produce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="pt-5">
+        <div class="mt-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-6 pb-5">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                <h1>Return product</h1>
+                            </div>
+                            <div class="card-body">
+                                <form action="/returnSinglePrdt/<%= orderId %>/<%= pdtId %>" method="POST">
+                                    <div class="list-group">
+                                        <label class="list-group-item d-flex gap-2" for="not_meet">
+                                            <input type="radio" id="not_meet" value="not_meet_expectations" name="reason"  class="form-check-input flex-shrink-0">
+                                            <span>
+                                                Product didn't meet expectations
+                                                <small class="d-block text-body-secondary">Explain that the product didn't meet your expectations or specifications. This could include issues like color, design, or functionality not matching what you expected.</small>
+                                            </span>
+                                        </label>
+                                        <label class="list-group-item d-flex gap-2" for="wrong_item">
+                                            <input type="radio" value="not_meet_expectations" id="wrong_item" name="reason"  class="form-check-input flex-shrink-0">
+                                            <span>
+                                                Received the wrong item
+                                                <small class="d-block text-body-secondary">Indicate that you received a different item from what you ordered or a different variant of the product (e.g., wrong size or color).</small>
+                                            </span>
+                                        </label>
+                                        <label class="list-group-item d-flex gap-2" for="damaged_item">
+                                            <input type="radio" value="damaged_item" id="damaged_item" name="reason"  class="form-check-input flex-shrink-0">
+                                            <span>
+                                                Item arrived damaged
+                                                <small class="d-block text-body-secondary">Specify if the product was physically damaged during transit, such as broken parts, scratches, or dents.</small>
+                                            </span>
+                                        </label>
+                                        <label class="list-group-item d-flex gap-2" for="changed_mind">
+                                            <input type="radio" value="changed_mind" id="changed_mind" name="reason"  class="form-check-input flex-shrink-0">
+                                            <span>
+                                                Changed my mind
+                                                <small class="d-block text-body-secondary">Mention that you decided you no longer want the product. This is typically due to a personal change of preference.</small>
+                                            </span>
+                                        </label>
+                                        <label class="list-group-item d-flex gap-2" for="quality_issue">
+                                            <input type="radio" value="quality_issue" id="quality_issue" name="reason"  class="form-check-input flex-shrink-0">
+                                            <span>
+                                                Quality issue
+                                                <small class="d-block text-body-secondary">Specify if there was a problem with the quality of the product, such as defects, missing parts, or poor craftsmanship.</small>
+                                            </span>
+                                        </label>
+                                        <label class="list-group-item d-flex gap-2" for="other">
+                                            <input type="radio" value="other" id="other" name="reason"  class="form-check-input flex-shrink-0">
+                                            <span>
+                                                Other
+                                                <small class="d-block text-body-secondary">Other</small>
+                                            </span>
+                                        </label>
+                                        <div class="d-grid mt-3">
+                                            <button class="btn btn-primary" type="submit">Return</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -8,7 +8,8 @@ const couponCtrl = require('../controllers/couponCtrl')
 const bannerCtrl = require('../controllers/bannerCtrl')
 const offerCtrl = require('../controllers/offerCtrl')
 const upload = require('../config/multer');
-const { isAdminLoggedIn, isAdminLoggedOut } = require('../middleware/auth')
+const { isAdminLoggedIn, isAdminLoggedOut } = require('../middleware/auth');
+const { uploadProductsImage, resizeProductsImages } = require('../middleware/sharp');
 
 
 const admin_route = express()
@@ -41,10 +42,12 @@ admin_route.get('/categories/list/:id',categoryCtrl.listCategory)
 //Product Handling Routes
 admin_route.get('/products',productCtrl.loadProduct)
 admin_route.get('/products/addProduct',productCtrl.loadAddProduct)
-admin_route.post('/products/addProduct',upload.array('productImage',3),productCtrl.addProductDetails)
+admin_route.post('/products/addProduct',uploadProductsImage, resizeProductsImages, productCtrl.addProductDetails)
 admin_route.get('/products/editProduct/:id',productCtrl.loadEditProduct)
 admin_route.post('/products/editProduct',upload.array('productImage',3),productCtrl.postEditProduct)
 admin_route.get('/products/deleteProduct/:id',productCtrl.deleteProduct)
+admin_route.get('/products/addstock/:id', productCtrl.showAddStock)
+admin_route.post('/products/addstock/:id', productCtrl.addStock)
 
 admin_route.get('/products/imageDelete/:id',productCtrl.deleteImage)
 

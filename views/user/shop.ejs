@@ -162,10 +162,8 @@
                         </div>
                     </div>
                     <div class="row">
-                        <% 
-                        if(pdtsData){
-                            for(let i=0; i<pdtsData.length; i++){
-                                %>
+                        <% if(pdtsData.length) { %>
+                            <% for(let i=0; i<pdtsData.length; i++) { %>
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     
                                     <div class="product__item">
@@ -233,10 +231,13 @@
                                     </div>
 
                                 </div>
-                                <% 
-                            } 
-                        }
-                        %>
+                                
+                            <% } %> 
+                        <% } else { %>
+                            <div class="d-flex align-items-center justify-content-center flex-column pt-5 mt-5">
+                                <img src="/assets/no-product-found.jpg" alt="">
+                             </div>
+                        <% } %>
 
                     </div>
 
@@ -264,9 +265,6 @@
         </div>
     </section>
     <!-- Shop Section End -->
-
-  
-
 
 <%- include('../partials/script.ejs') %>
 <%- include('../partials/footer.ejs') %>
