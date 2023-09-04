@@ -24,7 +24,7 @@ function validateName() {
     }
 
     if (!name.match(nameRegex)) {
-        nameError.innerHTML = "Numbers not allowed";
+        nameError.innerHTML = "Enter a validate name";
         return false;
     }
 
