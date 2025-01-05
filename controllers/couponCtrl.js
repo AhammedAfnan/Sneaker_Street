@@ -15,7 +15,7 @@ const loadCoupons = async(req, res, next) => {
 const loadAddCoupon = async(req, res, next) => {
     try {
         const couponTypes = Coupons.schema.path('discountType').enumValues
-        console.log(couponTypes);
+        // console.log(couponTypes);
         res.render('addCoupon',{page:'Coupons', couponTypes })
     } catch (error) {
         next(error)
@@ -35,15 +35,15 @@ const postAddCoupon = async(req, res, next) => {
             couponCount = parseInt(req.body.couponCount)
         }
         
-        console.log('coupon Count : '+couponCount);
-        console.log(' type of coupon Count : '+typeof couponCount);
+        // console.log('coupon Count : '+couponCount);
+        // console.log(' type of coupon Count : '+typeof couponCount);
         const isCodeExist = await Coupons.findOne({code})
         if(!isCodeExist){
             await new Coupons({
                 code, discountAmount, discountType, maxDiscountAmount, minPurchase, expiryDate, description, couponCount
             }).save()
         }else{
-            console.log('Code already exist');
+            // console.log('Code already exist');
         }
 
         res.redirect('/admin/coupons')
@@ -67,7 +67,7 @@ const loadEditCoupon = async(req, res, next) => {
 
 const postEditCoupon = async(req, res, next) => {
     try {
-        console.log('posting edit coupon');
+        // console.log('posting edit coupon');
         const couponId = req.params.couponId;
         const { discountAmount, discountType, maxDiscountAmount, minPurchase, expiryDate, description, couponCount } = req.body;
         const code = req.body.code.toUpperCase()
@@ -86,7 +86,7 @@ const postEditCoupon = async(req, res, next) => {
             );
 
         }else{
-            console.log('Code already exist, update expiry date if you want to add same code again');
+            // console.log('Code already exist, update expiry date if you want to add same code again');
         }
 
         res.redirect('/admin/coupons');
@@ -113,11 +113,11 @@ const cancelCoupon = async(req, res, next) => {
 
 const applyCoupon = async(req, res, next) => {
     try {
-        console.log('On apply coupon controller');
+        // console.log('On apply coupon controller');
         const userId = req.session.userId;
         const code = req.body.code.toUpperCase()
-        console.log('from body : '+code);
-        console.log('from query : '+req.query.code);
+        // console.log('from body : '+code);
+        // console.log('from query : '+req.query.code);
 
         const couponData = await Coupons.findOne({code})
         let userData = await User.findById({_id:userId}).populate('cart.productId')

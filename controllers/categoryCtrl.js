@@ -23,7 +23,7 @@ const addCategory = async(req, res, next) => {
             const isExistCategory = await Categories.findOne({name:categoryName});
 
             if(isExistCategory){
-                console.log('Category Already Exists');
+                // console.log('Category Already Exists');
                 res.redirect('/admin/categories');
                 
             }else{
@@ -32,7 +32,7 @@ const addCategory = async(req, res, next) => {
             }
 
         }else{
-            console.log('Enter Category Name');
+            // console.log('Enter Category Name');
             res.redirect('/admin/categories');
         }
 
@@ -43,14 +43,14 @@ const addCategory = async(req, res, next) => {
 
 const editCategory = async(req, res, next) => {
     try {
-        console.log('on edit category controller its working!');
+        // console.log('on edit category controller its working!');
         const id = req.body.categoryId
         const newName = req.body.categoryName.toUpperCase()
 
         const isCategoryExist = await Categories.findOne({name:newName})
-        console.log(newName);
-        console.log(isCategoryExist);
-        console.log(req.file);
+        // console.log(newName);
+        // console.log(isCategoryExist);
+        // console.log(req.file);
 
         if(req.file){
             const image = req.file.filename

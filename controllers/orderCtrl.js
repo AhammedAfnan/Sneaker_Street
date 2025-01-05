@@ -65,7 +65,7 @@ const placeOrder = async (req, res, next) => {
     );
     const cart = userData.cart;
     const walletAmount = (req.session.walletAmount = parseInt(userData.wallet));
-    console.log(walletAmount);
+    // console.log(walletAmount);
     req.session.cart = cart;
 
     let products = [];
@@ -129,7 +129,7 @@ const placeOrder = async (req, res, next) => {
       req.session.totalPrice = totalPrice;
 
       if (paymentMethod === "COD") {
-        console.log("Payment method is COD");
+        // console.log("Payment method is COD");
 
         await new Orders({
           userId,
@@ -176,7 +176,7 @@ const placeOrder = async (req, res, next) => {
         req.session.cartCount = 0;
         res.json({ status: "COD" });
       } else if (paymentMethod === "Razorpay") {
-        console.log("Payment method razorpay");
+        // console.log("Payment method razorpay");
 
         if (isWalletSelected) {
           totalPrice = totalPrice - walletAmount;
@@ -264,7 +264,7 @@ const placeOrder = async (req, res, next) => {
         res.json({ status: "Wallet" });
       }
     } else {
-      console.log("Cart is empty");
+      // console.log("Cart is empty");
       res.redirect("/shop");
     }
   } catch (error) {
@@ -368,7 +368,7 @@ const verifyPayment = async (req, res, next) => {
 
 const loadMyOrders = async (req, res, next) => {
   try {
-    console.log("Loaded my orders");
+    // console.log("Loaded my orders");
     const userId = req.session.userId;
     const orderData = await Orders.find({ userId })
       .populate("products.productId")

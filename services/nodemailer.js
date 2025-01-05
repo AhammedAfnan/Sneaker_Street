@@ -29,7 +29,7 @@ const sendVerifyMail = async(userEmail, OTP) => {
             if(error){
                 console.log(error);
             }else{
-                console.log('Email has been sent :- ',info.response);
+                // console.log('Email has been sent :- ',info.response);
             }
         })
 
