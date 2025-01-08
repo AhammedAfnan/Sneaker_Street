@@ -519,7 +519,7 @@ const changeOrderStatus = async (req, res, next) => {
         pdt.status = status;
       }
     }
-    console.log("orderData saving");
+    // console.log("orderData saving");
     await orderData.save();
     await updateOrderStatus(orderId, next);
 
@@ -551,10 +551,10 @@ const updateOrderStatus = async function (orderId, next) {
       }
     });
 
-    console.log(statusCounts);
+    // console.log(statusCounts);
 
     if (statusCounts.length === 1) {
-      console.log("only one status exist");
+      // console.log("only one status exist");
       orderData.status = statusCounts[0].status;
       await orderData.save();
       return;
@@ -602,45 +602,45 @@ const updateOrderStatus = async function (orderId, next) {
       }
     });
 
-    console.log("isorderconfiremd : " + isOrderConfirmedExists);
+    // console.log("isorderconfiremd : " + isOrderConfirmedExists);
 
     if (isOrderConfirmedExists) {
       orderData.status = "Order Confirmed";
-      console.log("orderData status set to Order Confirmed");
+      // console.log("orderData status set to Order Confirmed");
       await orderData.save();
       return;
     }
 
-    console.log("isShippedExists : " + isShippedExists);
+    // console.log("isShippedExists : " + isShippedExists);
     if (isShippedExists) {
       orderData.status = "Shipped";
-      console.log("orderData status set to shipped");
+      // console.log("orderData status set to shipped");
       await orderData.save();
       return;
     }
 
-    console.log("isout for delivereyExists : " + isOutForDeliveryExists);
+    // console.log("isout for delivereyExists : " + isOutForDeliveryExists);
 
     if (isOutForDeliveryExists) {
       orderData.status = "Out For Delivery";
-      console.log("orderData status set to Out for delivery");
+      // console.log("orderData status set to Out for delivery");
       await orderData.save();
       return;
     }
 
     if (isDeliveredExists) {
       orderData.status = "Delivered";
-      console.log("orderData status set to Delivered");
+      // console.log("orderData status set to Delivered");
       await orderData.save();
       return;
     }
 
-    console.log(
-      cancelledByUserCount + " type : " + typeof cancelledByUserCount
-    );
-    console.log(
-      cancelledByAdminCount + " type : " + typeof cancelledByAdminCount
-    );
+    // console.log(
+    //   cancelledByUserCount + " type : " + typeof cancelledByUserCount
+    // );
+    // console.log(
+    //   cancelledByAdminCount + " type : " + typeof cancelledByAdminCount
+    // );
 
     let cancelledCount = 0;
     if (cancelledByUserCount) {
@@ -650,47 +650,47 @@ const updateOrderStatus = async function (orderId, next) {
       cancelledCount += cancelledByAdminCount;
     }
 
-    console.log("cancelled count : " + cancelledCount);
+    // console.log("cancelled count : " + cancelledCount);
     if (
       cancelledByUserCount === orderData.products.length ||
       cancelledCount === orderData.products.length
     ) {
       orderData.status = "Cancelled";
-      console.log("orderData status set to Cancelled");
+      // console.log("orderData status set to Cancelled");
       await orderData.save();
       return;
     }
 
     if (cancelledByAdminCount === orderData.products.length) {
       orderData.status = "Cancelled By Admin";
-      console.log("orderData status set to Cancelled By Admin");
+      // console.log("orderData status set to Cancelled By Admin");
       await orderData.save();
       return;
     }
 
-    console.log("returned count : " + returnedCount);
-    console.log("return approval count : " + returnApprovalCount);
+    // console.log("returned count : " + returnedCount);
+    // console.log("return approval count : " + returnApprovalCount);
 
     if (
       cancelledCount + returnApprovalCount + returnedCount ===
       orderData.products.length
     ) {
       orderData.status = "Pending Return Approval";
-      console.log("orderData status set to Pending Return Approval");
+      // console.log("orderData status set to Pending Return Approval");
       await orderData.save();
       return;
     }
 
     if (cancelledCount + returnedCount === orderData.products.length) {
       orderData.status = "Returned";
-      console.log("orderData status set to Returned");
+      // console.log("orderData status set to Returned");
       await orderData.save();
       return;
     }
 
-    console.log(
-      "oops there is an error, function returned anywhere, from orderModel"
-    );
+    // console.log(
+    //   "oops there is an error, function returned anywhere, from orderModel"
+    // );
     // }
   } catch (error) {
     next(error);
@@ -700,7 +700,7 @@ const updateOrderStatus = async function (orderId, next) {
 const cancelOrder = async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
-    console.log("typeof orderId : " + typeof orderId);
+    // console.log("typeof orderId : " + typeof orderId);
     const cancelledBy = req.query.cancelledBy;
     const orderData = await Orders.findById({ _id: orderId });
     const userId = orderData.userId;
@@ -718,13 +718,13 @@ const cancelOrder = async (req, res, next) => {
         ) {
           pdt.status = "Cancelled";
           refundAmount = refundAmount + pdt.totalPrice;
-          console.log("pdt.status set to Cancelled");
+          // console.log("pdt.status set to Cancelled");
         }
       }
-      console.log("orderData saving");
+      // console.log("orderData saving");
       await orderData.save();
       await updateOrderStatus(orderId, next);
-      console.log("updateOrderStatus function executed");
+      // console.log("updateOrderStatus function executed");
     } else if (cancelledBy == "admin") {
       for (const pdt of orderData.products) {
         if (
@@ -736,15 +736,15 @@ const cancelOrder = async (req, res, next) => {
         ) {
           pdt.status = "Cancelled By Admin";
           refundAmount = refundAmount + pdt.totalPrice;
-          console.log("pdt.status set to Cancelled");
+          // console.log("pdt.status set to Cancelled");
         }
       }
     }
 
-    console.log("orderData saving");
+    // console.log("orderData saving");
     await orderData.save();
     await updateOrderStatus(orderId, next);
-    console.log("updateOrderStatus function executed");
+    // console.log("updateOrderStatus function executed");
 
     //Updating wallet if order not COD
     if (orderData.paymentMethod !== "COD") {
@@ -752,7 +752,7 @@ const cancelOrder = async (req, res, next) => {
     }
 
     if (cancelledBy == "user") {
-      console.log("redirecting to view order details");
+      // console.log("redirecting to view order details");
       res.redirect(`/viewOrderDetails/${orderId}`);
     } else if (cancelledBy == "admin") {
       res.redirect("/admin/ordersList");

@@ -23,7 +23,7 @@ exports.uploadProductsImage = upload.fields([
 ]);
 
 exports.resizeProductsImages = async (req, res, next) => {
-  console.log(req.files.images);
+  // console.log(req.files.images);
   if (!req.files.images) return next();
   req.body.images = [];
   await Promise.all(

@@ -59,7 +59,7 @@ const addProductDetails = async (req, res, next) => {
     if (check6) size.push(check6);
 
     const catData = await Categories.find({ name: category });
-    console.log(catData);
+    // console.log(catData);
     const prodData = await new Products({
       brand,
       name: productName,
@@ -125,16 +125,16 @@ const postEditProduct = async (req, res, next) => {
       for (let file of req.files) {
         newImages.push(file.filename);
       }
-      console.log("id : " + id);
+      // console.log("id : " + id);
       await Products.findOneAndUpdate(
         { _id: id },
         { $push: { images: { $each: newImages } } }
       );
     }
 
-    console.log("category : " + category);
+    // console.log("category : " + category);
     const catData = await Categories.findOne({ name: category });
-    console.log(catData);
+    // console.log(catData);
     await Products.findByIdAndUpdate(
       { _id: id },
       {
@@ -180,7 +180,7 @@ const deleteImage = async (req, res, next) => {
       { $pull: { images: imageURL } }
     );
 
-    console.log("imageURL :  " + imageURL + "type :" + typeof imageURL);
+    // console.log("imageURL :  " + imageURL + "type :" + typeof imageURL);
 
     const imgFolder = path.join(__dirname, "../public/images/productImages");
 
@@ -302,7 +302,7 @@ const loadShop = async (req, res, next) => {
       pdtsData.forEach((pdt) => {
         if (pdt.offerPrice) {
           pdt.actualPrice = pdt.offerPrice;
-          console.log(pdt.actualPrice);
+          // console.log(pdt.actualPrice);
         } else {
           pdt.actualPrice = pdt.price - pdt.discountPrice;
         }

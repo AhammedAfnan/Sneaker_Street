@@ -60,7 +60,7 @@ const isAdminLoggedIn = (req, res, next) => {
         next();
 
     } catch (error) {
-        console.log('Error occured on isAdminloggedIn middleware');
+        // console.log('Error occured on isAdminloggedIn middleware');
         console.log(error);
     }
 }

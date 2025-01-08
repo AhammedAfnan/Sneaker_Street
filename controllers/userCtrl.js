@@ -98,11 +98,11 @@ const saveAndLogin = async (req, res, next) => {
       const OTP = (req.session.OTP = getOTP());
 
       sendVerifyMail(email, OTP);
-      console.log(email);
-      console.log(OTP);
+      // console.log(email);
+      // console.log(OTP);
       setTimeout(() => {
         req.session.OTP = null; // Or delete req.session.otp;
-        console.log("otp time out");
+        // console.log("otp time out");
       }, 10000);
 
       res.render("otpValidation", {
@@ -174,7 +174,7 @@ const validateOTP = async (req, res, next) => {
     } else {
       // Incorrect OTP
       if (req.session.OTP) {
-        console.log("Incorrect OTP");
+        // console.log("Incorrect OTP");
         res.render("otpValidation", {
           fname,
           lname,
@@ -207,10 +207,10 @@ const resendOTP = async (req, res, next) => {
     // console.log('in resend otp controller');
     const { email } = req.body;
     const OTP = (req.session.OTP = getOTP());
-    console.log("resending otp " + OTP + " to " + email);
+    // console.log("resending otp " + OTP + " to " + email);
     setTimeout(() => {
       req.session.OTP = null; // Or delete req.session.otp;
-      console.log("otp time out");
+      // console.log("otp time out");
     }, 10000);
     sendVerifyMail(email, OTP);
 
@@ -303,7 +303,7 @@ const addToCart = async (req, res, next) => {
           }
         );
 
-        console.log("Product already exist on cart, quantity incremeted by 1");
+        // console.log("Product already exist on cart, quantity incremeted by 1");
       }
     }
 
@@ -482,15 +482,15 @@ const postChangeMail = async (req, res, next) => {
     const isMailExist = await User.findOne({ email: newMail });
 
     if (isMailExist) {
-      console.log("Mail Already Exist");
+      // console.log("Mail Already Exist");
       return;
     } else {
       const OTP = (req.session.OTP = getOTP());
-      console.log("OTP generated when posted new email " + OTP);
+      // console.log("OTP generated when posted new email " + OTP);
 
       setTimeout(() => {
         req.session.OTP = null; // Or delete req.session.otp;
-        console.log("otp time out");
+        // console.log("otp time out");
       }, 6000);
 
       sendVerifyMail(newMail, OTP);
@@ -520,7 +520,7 @@ const otpValidationToChangeMail = async (req, res, next) => {
       );
       res.redirect("/profile");
     } else {
-      console.log("OTP not correct");
+      // console.log("OTP not correct");
     }
   } catch (error) {
     next(error);
@@ -529,7 +529,7 @@ const otpValidationToChangeMail = async (req, res, next) => {
 
 const loadChangePassword = async (req, res, next) => {
   try {
-    console.log("loaded change password page");
+    // console.log("loaded change password page");
     res.render("changePass");
   } catch (error) {
     next(error);
@@ -538,7 +538,7 @@ const loadChangePassword = async (req, res, next) => {
 
 const postChangePassword = async (req, res, next) => {
   try {
-    console.log("posted change password");
+    // console.log("posted change password");
 
     const userId = req.session.userId;
     const { oldPassword, newPassword, confirmPassword } = req.body;
@@ -572,7 +572,7 @@ const postChangePassword = async (req, res, next) => {
 /////////////////////////////////////////////////////////
 const forgotPassword = async (req, res, next) => {
   try {
-    console.log("loaded forgot password");
+    // console.log("loaded forgot password");
     const userMail = await User.findById(
       { _id: req.session.userId },
       { email: 1, _id: 0 }
@@ -581,7 +581,7 @@ const forgotPassword = async (req, res, next) => {
     sendVerifyMail(userMail.email, OTP);
     setTimeout(() => {
       req.session.OTP = null; // Or delete req.session.otp;
-      console.log("otp time out");
+      // console.log("otp time out");
     }, 6000);
     res.render("forgotPasswordVerification");
   } catch (error) {
@@ -596,7 +596,7 @@ const verifyOTPforgotPass = async (req, res, next) => {
     if (userOTP == adminOTP) {
       res.render("resetPassword");
     } else {
-      console.log("OTP not matching .... :(");
+      // console.log("OTP not matching .... :(");
       res.redirect("/profile/forgotPassword");
     }
   } catch (error) {
@@ -628,7 +628,7 @@ const postResetPassword = async (req, res, next) => {
           },
         }
       );
-      console.log("password updated");
+      // console.log("password updated");
       return res.redirect("/profile");
     }
   } catch (error) {
@@ -654,7 +654,7 @@ const loadWalletHistory = async (req, res, next) => {
 
 const addMoneyToWallet = async (req, res, next) => {
   try {
-    console.log("adding money to wallet");
+    // console.log("adding money to wallet");
     const { amount } = req.body;
     const id = crypto.randomBytes(8).toString("hex");
 
@@ -690,7 +690,7 @@ const verifyWalletPayment = async (req, res, next) => {
     );
     hmac = hmac.digest("hex");
     if (hmac === details["response[razorpay_signature]"]) {
-      console.log("order verified updating wallet");
+      // console.log("order verified updating wallet");
 
       const walletHistory = {
         date: new Date(),
@@ -721,7 +721,7 @@ const verifyWalletPayment = async (req, res, next) => {
 
 const loadWishlist = async (req, res, next) => {
   try {
-    console.log("loading wishlist");
+    // console.log("loading wishlist");
     const userId = req.session.userId;
     const isLoggedIn = Boolean(req.session.userId);
     const userData = await User.findById({ _id: userId }).populate("wishlist");
